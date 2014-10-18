@@ -53,6 +53,9 @@ Best way to see if the plugin works is to test manually. Create a new user in yo
 
 == Changelog ==
 
+= 20141017 =
+* Name changed to "KC a2M+MC Free"
+
 = 20141012 =
 * WP compability checked.
 * License changed to GPL 2.0+

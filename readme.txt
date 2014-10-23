@@ -53,6 +53,9 @@ Best way to see if the plugin works is to test manually. Create a new user in yo
 
 == Changelog ==
 
+= 20141023 =
+* Name and URL changed to indicate that this is a free version
+
 = 20141017 =
 * Name changed to "KC a2M+MC Free"
 

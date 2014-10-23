@@ -1,9 +1,9 @@
 <?php
 /*
 	Plugin Name: KC S2M+MC Free
-	Plugin URI: http://krumch.com/2012/08/11/kc-bidirectional-integration-of-s2member-with-mailchimp/
-	Description: Bidirectional transparent integration/synchronization/bridge of S2Member with MailChimp
-	Version: 20141017
+	Plugin URI: http://krumch.com/kc-s2m-mc/
+	Description: Bidirectional transparent integration/synchronization/bridge of S2Member with MailChimp - Free edition
+	Version: 20141023
 	Author: Krum Cheshmedjiev
 	Author URI: http://krumch.com
 	Tested up to: 4.0

@@ -3,7 +3,7 @@ Contributors: krumch
 Donate link: http://krumch.com/2012/08/24/kc-bidirectional-integration-of-s2member-with-mailchimp/
 Tags: bidirectional, transparent, integration, integrate, synchronization, synchronize, s2m, s2member, mailchimp, mc, member, members, members info, mail, email, mail info, list, lists, mailing list, tool, bridge
 Requires at least: 3.0
-Tested up to: 4.1
+Tested up to: 4.2
 Stable tag: 20141012
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -52,6 +52,9 @@ Best way to see if the plugin works is to test manually. Create a new user in yo
 3. Admin area, ideal case.
 
 == Changelog ==
+
+= 20150427 =
+* WP compability checked.
 
 = 20141023 =
 * Name and URL changed to indicate that this is a free version

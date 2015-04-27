@@ -3,10 +3,10 @@
 	Plugin Name: KC S2M+MC Free
 	Plugin URI: http://krumch.com/kc-s2m-mc/
 	Description: Bidirectional transparent integration/synchronization/bridge of S2Member with MailChimp - Free edition
-	Version: 20141023
+	Version: 20150427
 	Author: Krum Cheshmedjiev
 	Author URI: http://krumch.com
-	Tested up to: 4.0
+	Tested up to: 4.2
 	Requires at least: 3.0
 	Requires: WordPress® 3.0+, PHP 5.2+
 	Tags: bidirectional, transparent, integration, integrate, synchronization, synchronize, s2m, s2member, mailchimp, mc, member, members, members info, mail, email, mail info, list, lists, mailing list, tool, bridge

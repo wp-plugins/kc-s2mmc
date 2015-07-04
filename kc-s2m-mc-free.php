@@ -3,10 +3,12 @@
 	Plugin Name: KC S2M+MC Free
 	Plugin URI: http://krumch.com/kc-s2m-mc/
 	Description: Bidirectional transparent integration/synchronization/bridge of S2Member with MailChimp - Free edition
-	Version: 20150427
+	Version: 20150705
 	Author: Krum Cheshmedjiev
 	Author URI: http://krumch.com
-	Tested up to: 4.2
+	Text Domain: kc-s2m-mc-free
+	Domain Path: /languages
+	Tested up to: 4.2.2
 	Requires at least: 3.0
 	Requires: WordPress® 3.0+, PHP 5.2+
 	Tags: bidirectional, transparent, integration, integrate, synchronization, synchronize, s2m, s2member, mailchimp, mc, member, members, members info, mail, email, mail info, list, lists, mailing list, tool, bridge
@@ -40,11 +42,16 @@ function kc_s2m_mc_deactivate() {
 register_deactivation_hook( __FILE__, 'kc_s2m_mc_deactivate' );
 add_action('ws_plugin__s2member_before_deactivation', 'kc_s2m_mc_deactivate');
 
+function kc_s2m_mc_translation() {
+	load_plugin_textdomain('kc-s2m-mc-free', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
+}
+add_action('init', 'kc_s2m_mc_translation');
+
 function kc_s2m_mc_admin() {
 	echo '<div id="kc_s2m_mc" style="width:80%;float:left;overflow-x:auto;"><form name="admin_form" method="post" action="'.str_replace( '%7E', '~', $_SERVER['REQUEST_URI']).'"><div style="text-align:center"><h1>KC s2M+MC</h1></div>';
 	if(isset($_POST['activate'])) kc_s2m_mc_activate();
 	if(is_plugin_active('s2member/s2member.php') and '' != $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"]) {
-		echo '<div style="text-align:center"><input type="submit" name="synch_check" value="Check for synchronization"></div>';
+		echo '<div style="text-align:center"><input type="submit" name="synch_check" value="'.__('Check for synchronization', 'kc-s2m-mc-free').'"></div>';
 		if(isset($_POST['webhooks'])) kc_s2m_mc_setWebhooks(kc_s2m_mc_getLists());
 		$syn = 0;
 		foreach($_POST as $name => $v) {
@@ -76,28 +83,34 @@ function kc_s2m_mc_admin() {
 		}
 		if($nosynch) {
 ?>
-				<div class="updated"><p><strong>Site members and MailChimp&#174; lists are not synchronized.</strong> <a href="#" onclick="alert('In fact, there is no way all accounts to be synchronized, because there is lot of cases and exceptions. MailChimp&#174; can report events slower, a member can not receive the confirmation email from MailChimp&#174;, or not click the link yet, or member is admin in the site - all these and others can cause differences in list of members at MailChimp&#174; and site.\n\nBest way to see if the plugin works is to test manually. Create a new user in your MailChimp&#174; list and check if it will be created in WordPress. Well, needs confirmation etc... If this do not works, click `Re-set MailChimp&#174; site` button, wait 5-10 min (MailChimp&#174; can be slow) and test again.'); return false;">[?]</a></p></div>
+				<div class="updated"><p><strong><?php _e('Site members and MailChimp&#174; lists are not synchronized.', 'kc-s2m-mc-free'); ?></strong> <a href="#" onclick="alert('<?php echo sprintf(__('In fact, there is no way all accounts to be synchronized, because there is lot of cases and exceptions. MailChimp&#174; can report events slower, a member can not receive the confirmation email from MailChimp&#174;, or not click the link yet, or member is admin in the site - all these and others can cause differences in list of members at MailChimp&#174; and site.\n\nBest way to see if the plugin works is to test manually. Create a new user in your MailChimp&#174; list and check if it will be created in WordPress. Well, needs confirmation etc... If this do not works, click `%s` button, wait 5-10 min (MailChimp&#174; can be slow) and test again.', 'kc-s2m-mc-free'), __('Re-set MailChimp&#174; site', 'kc-s2m-mc-free')); ?>'); return false;">[?]</a></p></div>
 	<form name="admin_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
 		<p><table border=0>
 <?php
 			$i = 0;
 			foreach($nosynch as $list => $l) {
 				$i++;
-				if(isset($l['list'])) echo '<tr><td><span style="color: #164A61;">List ID '.$list.' have '.$l['list'].' members, what is not exists in site\'s DB.</span></td><td><input type="submit" name="synch_list_'.$list.'" value="Synch it"></td><td><input type="submit" name="forget_list_'.$list.'" value="Forget it"></td></tr>';
-				if(isset($l['site'])) echo '<tr><td><span style="color: #164A61;">'.$l['site'].' site\'s members are not present in the list ID '.$list.'<br>(allow some time for people to confirm and then check agayn).</span></td><td><input type="submit" name="synch_site_'.$list.'" value="Synch it"></td><td><input type="submit" name="forget_site_'.$list.'" value="Forget it"></td></tr>';
-				if(isset($l['list']) and isset($l['site'])) echo '<tr><td colspan=3><span style="color: #164A61;">Synchronize both ways the list ID '.$list.'.</span>&nbsp;<input type="submit" name="synch_all_'.$list.'" value="Synch it">&nbsp;<input type="submit" name="forget_all_'.$list.'" value="Forget it"></td></tr>';
+				if(isset($l['list'])) echo '<tr><td><span style="color: #164A61;">'.sprintf(__('List ID %s have %s members, what is not exists in site\'s DB.', 'kc-s2m-mc-free'), $list, $l['list']).'</span></td><td><input type="submit" name="synch_list_'.$list.'" value="'.__('Synch it', 'kc-s2m-mc-free').'"></td><td><input type="submit" name="forget_list_'.$list.'" value="'.__('Forget it', 'kc-s2m-mc-free').'"></td></tr>';
+				if(isset($l['site'])) echo '<tr><td><span style="color: #164A61;">'.sprintf(__('%s site\'s members are not present in the list ID %s<br>(allow some time for people to confirm and then check again).', 'kc-s2m-mc-free'), $l['site'], $list).'</span></td><td><input type="submit" name="synch_site_'.$list.'" value="'.__('Synch it', 'kc-s2m-mc-free').'"></td><td><input type="submit" name="forget_site_'.$list.'" value="'.__('Forget it', 'kc-s2m-mc-free').'"></td></tr>';
+				if(isset($l['list']) and isset($l['site'])) echo '<tr><td colspan=3><span style="color: #164A61;">'.sprintf(__('Synchronize both ways the list ID %s.', 'kc-s2m-mc-free'), $list).'</span>&nbsp;<input type="submit" name="synch_all_'.$list.'" value="'.__('Synch it', 'kc-s2m-mc-free').'">&nbsp;<input type="submit" name="forget_all_'.$list.'" value="'.__('Forget it', 'kc-s2m-mc-free').'"></td></tr>';
 			}
-			if($i > 1) echo '<tr><td align="center" colspan=3><input type="submit" name="synch_all" value="Synch ALL">&nbsp;<input type="submit" name="forget_all" value="Forget ALL"></td></tr>';
+			if($i > 1) echo '<tr><td align="center" colspan=3><input type="submit" name="synch_all" value="'.__('Synch ALL', 'kc-s2m-mc-free').'">&nbsp;<input type="submit" name="forget_all" value="'.__('Forget ALL', 'kc-s2m-mc-free').'"></td></tr>';
 ?>
 		</table></p>
 <?php
 		}
-		echo '<div style="text-align:center"><input type="submit" name="webhooks" value="Re-set MailChimp&#174; site"></div>';
+		echo '<div style="text-align:center"><input type="submit" name="webhooks" value="'.__('Re-set MailChimp&#174; site', 'kc-s2m-mc-free').'"></div>';
 	} else {
-		echo 'You\'ll need first to install <a href="http://www.s2member.com/2842.html" target="_blank" rel="external">s2Member&#174; plugin</a>. You\'ll need a <a href="http://www.s2member.com/mailchimp" target="_blank" rel="external">MailChimp&#174; account</a>, a <a href="http://www.s2member.com/mailchimp-api-key" target="_blank" rel="external">MailChimp&#174; API Key</a>, your <a href="#" onclick="alert(\'To obtain your MailChimp&#174; List ID(s), log into your MailChimp&#174; account and click the Lists tab. Now click the (View) button, for the List(s) you want to integrate with s2Member. Then, click the (Settings) link. At the bottom of the (Settings) page, for each list; you\\\'ll find a Unique List ID.\'); return false;">MailChimp&#174; List IDs</a> and must set some fields at <a href="'.site_url('/wp-admin/admin.php?page=ws-plugin--s2member-els-ops', 'http').'" target="_blank" rel="external">s2Member&#174; API / List Servers</a> page in the "MailChimp&#174; Integration" tab.<br><br><div style="text-align:center"><input type="submit" name="activate" value="All done, run the synchronization"></div>';
+		$alert = __('To obtain your MailChimp&#174; List ID(s), log into your MailChimp&#174; and go to the List. Now click the (Settings) link in the menu. A submenu opens, click the (List name and defaults) row. You will find List ID in red, at right column. Until MailChimp&#174 change the user interface again...', 'kc-s2m-mc-free');
+		$s2mpgl = '<a href="http://www.s2member.com/2842.html" target="_blank" rel="external">'.__('s2Member&#174; plugin', 'kc-s2m-mc-free').'</a>';
+		$mcacc = '<a href="http://www.s2member.com/mailchimp" target="_blank" rel="external">'.__('MailChimp&#174; account', 'kc-s2m-mc-free').'</a>';
+		$mcak = '<a href="http://www.s2member.com/mailchimp-api-key" target="_blank" rel="external">'.__('MailChimp&#174; API Key', 'kc-s2m-mc-free').'</a>';
+		$mclid = '<a href="#" onclick="alert('.$alert.'); return false;">'.__('MailChimp&#174; List IDs', 'kc-s2m-mc-free').'</a>';
+		$s2mals = '<a href="'.site_url('/wp-admin/admin.php?page=ws-plugin--s2member-els-ops', 'http').'" target="_blank" rel="external">'.__('s2Member&#174; API / List Servers', 'kc-s2m-mc-free').'</a>';
+		echo sprintf(__('You will need first to install %s. You will need a %s, a %s, your %s and must set some fields at %s page in the "MailChimp&#174; Integration" tab.', 'kc-s2m-mc-free'), $s2mpgl, $mcacc, $mcak, $mclid, $s2mals).'<br><br><div style="text-align:center"><input type="submit" name="activate" value="'.__('All done, run the synchronization', 'kc-s2m-mc-free').'"></div>';
 	}
 ?>
-				</form><div style="text-align:center"><br><br><a href="http://krumch.com/2012/08/25/new-features-for-kc-s2mmc-plugin/" target="_blank">See, add and vote for possible new features</a></div></div><div style="float:left;width:19.9%;height:100%;border-left:1px dotted black;"><iframe id="kcnews" width="100%" height="500" src="http://krumch.com/kc_news.php?src=kc_s2m_mc"></iframe></div>
+				</form><div style="text-align:center"><br><br><a href="http://krumch.com/2012/08/25/new-features-for-kc-s2mmc-plugin/" target="_blank"><?php _e('See, add and vote for possible new features', 'kc-s2m-mc-free'); ?></a></div></div><div style="float:left;width:19.9%;height:100%;border-left:1px dotted black;"><iframe id="kcnews" width="100%" height="500" src="http://krumch.com/kc_news.php?src=kc_s2m_mc"></iframe></div>
 <script type='text/javascript'>
 /* <![CDATA[ */
 	jQuery('#kcnews').css('height', jQuery('#kcnews').parent().parent().css('height'));
